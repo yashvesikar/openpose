@@ -1,6 +1,5 @@
 FROM ubuntu:20.04
 
-# prevent hanging for tzname
 ENV  DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /app
@@ -20,4 +19,8 @@ RUN apt-get install -y libboost-all-dev libhdf5-dev libatlas-base-dev
 # project setup
 RUN git submodule update --init --recursive --remote
 
-RUN mkdir build && cd build
+# build the project
+RUN mkdir build && \
+    cd build && \
+    cmake -D GPU_MODE=CPU_ONLY .. && \
+    make -j`nproc`
